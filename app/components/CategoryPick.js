@@ -1,22 +1,6 @@
-// import React from 'react';
-// import {View, Text, Button} from 'react-native';
-
-// function CategoryPick({history}){
-//     return (
-//         <View>
-//             <Text></Text>
-//             <Button title='Fashion' onPress={() => history.push('/shop')}></Button>
-//             <Button title='Food' onPress={() => history.push('/shop')}></Button>
-//             <Button title='Sports' onPress={() => history.push('/shop')}></Button>
-//         </View>   
-//     )
-// }
-
-// export default CategoryPick;
-
 import React, {Component} from 'react';
 import axios from 'axios';
-import { StyleSheet, View, Text, Button, TextInput } from 'react-native';
+import { StyleSheet, View, Text, Button, TouchableOpacity, Image } from 'react-native';
 import { withRouter } from "react-router";
 import t from 'tcomb-form-native';
 
@@ -26,13 +10,23 @@ const Item = t.struct({
   category: t.String
 })
 
+const formStyles = {
+    ...Form.stylesheet,
+    formGroup: {
+        normal: {
+          display: 'none'
+        },
+      },
+}
+
 const options = {
   fields: {
     category: {
       label: "Please select a category you'd like to browse...",
       error: 'This field is required'
     }
-  }
+  },
+  stylesheet: formStyles,
 }
 
 class CategoryPick extends Component {
@@ -47,15 +41,33 @@ class CategoryPick extends Component {
       this.setState({category: this._form.getValue()});
     }
 
-    handleSubmit = (history) => {
+    handleSubmit = (choice, history) => {
         bpResTxt = this.props.location.search//"Budget added to user with ID: n"
         bpResId = parseInt(bpResTxt.slice(-1));
-        updatedUser = {
-            budget: parseInt(this.props.location.state.budget.budget),
-            likes: this.state.category.category,
-            id: bpResId
-        }        
-        console.log(JSON.stringify(updatedUser));
+        switch(choice){
+            case 'Fashion':
+                updatedUser = {
+                    budget: parseInt(this.props.location.state.budget.budget),
+                    likes: 'Fashion',
+                    id: bpResId
+                }       
+                break;
+            case 'Food':
+                updatedUser = {
+                    budget: parseInt(this.props.location.state.budget.budget),
+                    likes: 'Food',
+                    id: bpResId
+                }       
+                break;
+            case 'Sports':
+                updatedUser = {
+                    budget: parseInt(this.props.location.state.budget.budget),
+                    likes: 'Sports',
+                    id: bpResId
+                }       
+            break;
+        }
+        //console.log(JSON.stringify(updatedUser));
         axios({
             method: 'put',
             url: `http://localhost:3003/users/${bpResId}`,//IDEALLY: ${this.props.id}
@@ -82,22 +94,41 @@ class CategoryPick extends Component {
             value={this.state.category}
             onChange={this.handleChange}
             options={options}
-          />
-          <Button 
-            title='Next'
-            onPress={() => this.handleSubmit(this.props.history)} 
-          />
+          /> 
+          <TouchableOpacity onPress={() => this.handleSubmit('Fashion', this.props.history)}>
+            <Image 
+                source={{ uri: 'http://www.myiconfinder.com/uploads/iconsets/256-256-03f7f7d93782e67e3fc9b15d2225c170-shirt.png'}}
+                style={styles.image}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => this.handleSubmit('Food', this.props.history)}>
+            <Image 
+                source={{ uri: 'https://cdn.iconscout.com/icon/free/png-256/fast-food-1851561-1569286.png'}}
+                style={styles.image}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => this.handleSubmit('Sports', this.props.history)}>
+            <Image 
+                source={{ uri: 'https://images.vexels.com/media/users/3/136491/isolated/preview/5ecfc6015087e42a5deb98d549fafd85-olympic-marathon-cartoon-by-vexels.png'}}
+                style={styles.image}
+            />
+          </TouchableOpacity>
         </View>   
     )
     }
 }
+
 const styles = StyleSheet.create({
   categoryContainer: {
     flex: 1,
     backgroundColor: '#FFF',
     alignItems: 'center',
-    justifyContent: 'center',
+    paddingTop: 150
   },
+  image: {
+    height: 200,
+    width: 200,
+  },  
   textInput: {
     height: 40,
     width: 200,
@@ -105,7 +136,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     borderColor: 'grey',
     borderWidth: 1,
-    backgroundColor: 'lightgrey',
+    backgroundColor: 'red',
   },
 });
 

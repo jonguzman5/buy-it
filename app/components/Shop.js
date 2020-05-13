@@ -1,12 +1,41 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import axios from 'axios';
-import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
+import { getData } from '../FakerData';
+import { StyleSheet, View, Text, Button, TouchableOpacity, Image } from 'react-native';
+import { withRouter } from "react-router";
+import t from 'tcomb-form-native';
+
+const Form = t.form.Form;
+
+const Item = t.struct({
+  purchase: t.String 
+})
+
+const formStyles = {
+  ...Form.stylesheet,
+  formGroup: {
+      normal: {
+        display: 'none'
+      },
+    },
+}
+
+const options = {
+  fields: {
+    category: {
+      label: '',
+      error: 'This field is required'
+    }
+  },
+  stylesheet: formStyles,
+}
 
 class Shop extends Component {
   constructor(props){
     super(props)
     this.state = {
-      imageUri: ''
+      imageUri: '',
+      purchase: ''
     }
   }  
   
@@ -16,9 +45,9 @@ class Shop extends Component {
   }
 
   componentDidMount(){
-    const category = 'sports';//
+    let data = getData();
     this.setState({
-      imageUri: 'https://knowpathology.com.au/app/uploads/2018/07/Happy-Test-Screen-01-825x510.png'//${sports}
+      imageUri: data.foodImage
     })
   }
 
@@ -32,8 +61,8 @@ class Shop extends Component {
           accessibilityLabel='api data'
         />
         <View style={styles.buttonContainer}>
-          <TouchableOpacity><Text style={styles.button}>CLICK ME!</Text></TouchableOpacity>
-          <TouchableOpacity><Text style={styles.button}>CLICK ME!</Text></TouchableOpacity>
+          <TouchableOpacity><Text style={styles.button}>NO</Text></TouchableOpacity>
+          <TouchableOpacity><Text style={styles.button}>YES</Text></TouchableOpacity>
         </View>
       </View>
     );    
