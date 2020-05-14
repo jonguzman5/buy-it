@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import axios from 'axios';
 import { getData } from '../FakerData';
-import { StyleSheet, View, Text, Button, TouchableOpacity, Image } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native';
 import { withRouter } from "react-router";
 import t from 'tcomb-form-native';
 
@@ -38,31 +38,83 @@ class Shop extends Component {
       purchase: ''
     }
   }  
-  
-  handleSubmit = (e) => {
-    e.preventDefault();
-    const input = this.state.imageUri;//passed down via props
-  }
 
   componentDidMount(){
     let data = getData();
     this.setState({
       imageUri: data.foodImage
     })
+    //console.log(`IN SHOP: ${}`)      
   }
 
+  handleChange = (e) => {
+    this.setState({purchase: this._form.getValue()});
+  }  
+
+  handleSubmit = (choice) => {
+    textProps = this.props.location.search;//"Like added to user with ID: n"
+    idProps = parseInt(textProps.slice(-1));
+    budgetProps = parseInt(this.props.location.state.budget);
+    categoryProps = this.props.location.state.likes;
+    switch(choice){
+      case 'Yes':
+          updatedUser = {
+              budget: budgetProps,
+              likes: categoryProps,
+              purchaseHistory: 'test1',
+              id: idProps
+          }       
+          break;
+      case 'No':
+          updatedUser = {
+              budget: budgetProps,
+              likes: categoryProps,
+              purchaseHistory: 'test2',//dislikes: 'IMAGE_URI_HERE'
+              id: idProps
+          }       
+          break;
+    }
+    //console.log(`IN SHOP: ${JSON.stringify(updatedUser)}`);
+    axios({
+        method: 'put',
+        url: `http://localhost:3003/users/${idProps}`,
+        data: updatedUser
+    }).then(response => {
+        if(response.status === 200){
+          console.log(`IN SHOP: ${JSON.stringify(response)}`);
+            //cycle api image
+        }
+        else {
+            throw new Error();
+        }        
+    }).catch(error => {
+        alert(`An error has occurred`);
+        console.log(error);
+    })      
+  }
 
   render(){
     return (
       <View style={styles.shopContainer}>
+        <Form 
+          ref={c => this._form = c}
+          type={Item}
+          value={this.state.purchase}
+          onChange={this.handleChange}
+          options={options}
+        />         
         <Image 
           style={styles.image}
           source={{ uri: this.state.imageUri }}
           accessibilityLabel='api data'
         />
         <View style={styles.buttonContainer}>
-          <TouchableOpacity><Text style={styles.button}>NO</Text></TouchableOpacity>
-          <TouchableOpacity><Text style={styles.button}>YES</Text></TouchableOpacity>
+          <TouchableOpacity onPress={() => this.handleSubmit('No')}>
+            <Text style={styles.button}>NO</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => this.handleSubmit('Yes')}>
+            <Text style={styles.button}>YES</Text>
+          </TouchableOpacity>
         </View>
       </View>
     );    
@@ -94,4 +146,4 @@ const styles = StyleSheet.create({
 });
 
 
-export default Shop;
+export default withRouter(Shop);

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import axios from 'axios';
-import { StyleSheet, View, Text, Button, TouchableOpacity, Image } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native';
 import { withRouter } from "react-router";
 import t from 'tcomb-form-native';
 
@@ -42,39 +42,49 @@ class CategoryPick extends Component {
     }
 
     handleSubmit = (choice, history) => {
-        bpResTxt = this.props.location.search//"Budget added to user with ID: n"
-        bpResId = parseInt(bpResTxt.slice(-1));
+        textProps = this.props.location.search//"Budget added to user with ID: n"
+        idProps = parseInt(textProps.slice(-1));
+        budgetProps = parseInt(this.props.location.state.budget.budget)
         switch(choice){
             case 'Fashion':
                 updatedUser = {
-                    budget: parseInt(this.props.location.state.budget.budget),
+                    budget: budgetProps,
                     likes: 'Fashion',
-                    id: bpResId
+                    id: idProps
                 }       
                 break;
             case 'Food':
                 updatedUser = {
-                    budget: parseInt(this.props.location.state.budget.budget),
+                    budget: budgetProps,
                     likes: 'Food',
-                    id: bpResId
+                    id: idProps
                 }       
                 break;
             case 'Sports':
                 updatedUser = {
-                    budget: parseInt(this.props.location.state.budget.budget),
+                    budget: budgetProps,
                     likes: 'Sports',
-                    id: bpResId
+                    id: idProps
                 }       
             break;
         }
-        //console.log(JSON.stringify(updatedUser));
+        //console.log(`IN CATEGORY: ${JSON.stringify(updatedUser)}`);
         axios({
             method: 'put',
-            url: `http://localhost:3003/users/${bpResId}`,//IDEALLY: ${this.props.id}
+            url: `http://localhost:3003/users/${idProps}`,//IDEALLY: ${this.props.id}
             data: updatedUser
         }).then(response => {
             if(response.status === 200){
-                history.push('/shop')
+                console.log(`IN CATEGORY: ${JSON.stringify(response)}`);
+                history.push({
+                    pathname: '/shop',
+                    state: {
+                        budget: updatedUser.budget,//budgetProps,
+                        likes: updatedUser.likes,
+                        id: updatedUser.id
+                    },
+                    search: response.data
+                })
             }
             else {
                 throw new Error();

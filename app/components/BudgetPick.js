@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import axios from 'axios';
-import { StyleSheet, View, Text, Button, TextInput } from 'react-native';
+import { StyleSheet, View, Text, Button } from 'react-native';
 import t from 'tcomb-form-native';
 
 const Form = t.form.Form;

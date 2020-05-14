@@ -17,11 +17,10 @@ app.get('/', (request, response) => {
     response.json({ info: 'Node.js, Express, and Postgres API' })
 })
 
-app.get('/users', db.getBudget);
-app.get('/users', db.getCategory);
+app.get('/users', db.getUsers);
 
-app.post('/users', db.setBudget);
-app.put('/users/:id', db.setCategory);
+app.post('/users', db.setUsers);
+app.put('/users/:id', db.updateUsers);
 
 app.listen(port, () => {
     console.log(`App running on port ${port}.`)
