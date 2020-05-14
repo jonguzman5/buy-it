@@ -75,7 +75,7 @@ class CategoryPick extends Component {
             data: updatedUser
         }).then(response => {
             if(response.status === 200){
-                console.log(`IN CATEGORY: ${JSON.stringify(response)}`);
+                //console.log(`IN CATEGORY: ${JSON.stringify(response)}`);
                 history.push({
                     pathname: '/shop',
                     state: {

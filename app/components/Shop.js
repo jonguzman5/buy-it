@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import axios from 'axios';
-import { getData } from '../FakerData';
+//import { getData } from '../FakerData';
 import { StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native';
 import { withRouter } from "react-router";
 import t from 'tcomb-form-native';
@@ -39,12 +39,15 @@ class Shop extends Component {
     }
   }  
 
-  componentDidMount(){
-    let data = getData();
+  getApiData = (categoryProps) => {
     this.setState({
-      imageUri: data.foodImage
+      imageUri: `https://loremflickr.com/400/400/${categoryProps}?random=${Date.now()}`
     })
-    //console.log(`IN SHOP: ${}`)      
+  }
+
+  componentDidMount(){
+    let categoryProps = this.props.location.state.likes;
+    this.getApiData(categoryProps); 
   }
 
   handleChange = (e) => {
@@ -56,12 +59,14 @@ class Shop extends Component {
     idProps = parseInt(textProps.slice(-1));
     budgetProps = parseInt(this.props.location.state.budget);
     categoryProps = this.props.location.state.likes;
+    let url = JSON.stringify([...this.state.imageUri].join(''))
+
     switch(choice){
       case 'Yes':
           updatedUser = {
               budget: budgetProps,
               likes: categoryProps,
-              purchaseHistory: 'test1',
+              purchaseHistory: url,
               id: idProps
           }       
           break;
@@ -69,7 +74,7 @@ class Shop extends Component {
           updatedUser = {
               budget: budgetProps,
               likes: categoryProps,
-              purchaseHistory: 'test2',//dislikes: 'IMAGE_URI_HERE'
+              purchaseHistory: url,//dislikes: 'IMAGE_URI_HERE'
               id: idProps
           }       
           break;
@@ -81,8 +86,8 @@ class Shop extends Component {
         data: updatedUser
     }).then(response => {
         if(response.status === 200){
-          console.log(`IN SHOP: ${JSON.stringify(response)}`);
-            //cycle api image
+          //console.log(`IN SHOP: ${JSON.stringify(response)}`);
+          this.getApiData(categoryProps);
         }
         else {
             throw new Error();

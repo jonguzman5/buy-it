@@ -35,7 +35,7 @@ class BudgetPick extends Component {
         url: `http://localhost:3003/users/`,
         data: this.state.budget
       }).then((response) => {
-        console.log(`IN BUDGETPICK: ${JSON.stringify(response.data)}`);
+        //console.log(`IN BUDGETPICK: ${JSON.stringify(response.data)}`);
         history.push({
           pathname: '/categoryPick',
           state: {

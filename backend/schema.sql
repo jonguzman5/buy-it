@@ -8,7 +8,7 @@ CREATE TABLE users (
     lname VARCHAR(20)  ,
     likes VARCHAR(20)  ,
     dislikes VARCHAR(20)  ,
-    purchaseHistory VARCHAR(20)  ,
+    purchaseHistory VARCHAR(60)  ,
     budget FLOAT(2)
 
 );
