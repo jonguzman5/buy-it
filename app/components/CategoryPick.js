@@ -1,8 +1,12 @@
 import React, {Component} from 'react';
 import axios from 'axios';
-import { StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, Image, ImageBackground } from 'react-native';
 import { withRouter } from "react-router";
 import t from 'tcomb-form-native';
+const bg = require('../img/bg.gif');
+const fashion = require('../img/fashion.png');
+const food = require('../img/food.png');
+const sports = require('../img/sports.png');
 
 const Form = t.form.Form;
 
@@ -98,31 +102,34 @@ class CategoryPick extends Component {
     render(){
       return (
         <View style={styles.categoryContainer}>
-          <Form 
-            ref={c => this._form = c}
-            type={Item}
-            value={this.state.category}
-            onChange={this.handleChange}
-            options={options}
-          /> 
-          <TouchableOpacity onPress={() => this.handleSubmit('Fashion', this.props.history)}>
-            <Image 
-                source={{ uri: 'http://www.myiconfinder.com/uploads/iconsets/256-256-03f7f7d93782e67e3fc9b15d2225c170-shirt.png'}}
-                style={styles.image}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => this.handleSubmit('Food', this.props.history)}>
-            <Image 
-                source={{ uri: 'https://cdn.iconscout.com/icon/free/png-256/fast-food-1851561-1569286.png'}}
-                style={styles.image}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => this.handleSubmit('Sports', this.props.history)}>
-            <Image 
-                source={{ uri: 'https://images.vexels.com/media/users/3/136491/isolated/preview/5ecfc6015087e42a5deb98d549fafd85-olympic-marathon-cartoon-by-vexels.png'}}
-                style={styles.image}
-            />
-          </TouchableOpacity>
+          <ImageBackground source={bg} style={styles.bg}>
+            <Text style={styles.text}>Please select a category...</Text>
+            <Form 
+              ref={c => this._form = c}
+              type={Item}
+              value={this.state.category}
+              onChange={this.handleChange}
+              options={options}
+            /> 
+            <TouchableOpacity onPress={() => this.handleSubmit('Fashion', this.props.history)}>
+              <Image 
+                  source={fashion}
+                  style={styles.image}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => this.handleSubmit('Food', this.props.history)}>
+              <Image 
+                  source={food}
+                  style={styles.image}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => this.handleSubmit('Sports', this.props.history)}>
+              <Image 
+                  source={sports}
+                  style={styles.image}
+              />
+            </TouchableOpacity>
+          </ImageBackground>  
         </View>   
     )
     }
@@ -131,22 +138,26 @@ class CategoryPick extends Component {
 const styles = StyleSheet.create({
   categoryContainer: {
     flex: 1,
-    backgroundColor: '#FFF',
     alignItems: 'center',
-    paddingTop: 150
+    justifyContent: 'center',
+  },
+  text: {
+    fontSize: 25,
+    paddingBottom: '10%',
+    opacity: 0.8
   },
   image: {
     height: 200,
     width: 200,
   },  
-  textInput: {
-    height: 40,
-    width: 200,
-    marginTop: 5,
-    marginBottom: 10,
-    borderColor: 'grey',
-    borderWidth: 1,
-    backgroundColor: 'red',
+  bg: {
+    flex: 1,
+    resizeMode: "cover",
+    width: '100%',
+    height: '100%',
+    position: 'absolute',
+    alignItems: 'center',
+    justifyContent: "center"
   },
 });
 

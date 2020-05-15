@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import axios from 'axios';
-import { StyleSheet, View, Text, Button } from 'react-native';
+import { StyleSheet, View, Text, Button, ImageBackground } from 'react-native';
 import t from 'tcomb-form-native';
+const bg = require('../img/bg.gif');
 
 const Form = t.form.Form;
 
@@ -50,17 +51,21 @@ class BudgetPick extends Component {
     render(){
       return (
         <View style={styles.budgetContainer}>
-          <Form 
-            ref={c => this._form = c}
-            type={Item}
-            value={this.state.budget}
-            onChange={this.handleChange}
-            options={options}
-          />
-          <Button 
-            title='Next'
-            onPress={() => this.handleSubmit(this.props.history)} 
-          />
+          <ImageBackground source={bg} style={styles.bg}>
+            <View style={styles.formContainer}>
+              <Form 
+                ref={c => this._form = c}
+                type={Item}
+                value={this.state.budget}
+                onChange={this.handleChange}
+                options={options}
+              />
+              <Button 
+                title='Next'
+                onPress={() => this.handleSubmit(this.props.history)} 
+              />
+            </View>
+          </ImageBackground>
         </View>   
     )
     }
@@ -68,18 +73,26 @@ class BudgetPick extends Component {
 const styles = StyleSheet.create({
   budgetContainer: {
     flex: 1,
-    backgroundColor: '#FFF',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  textInput: {
-    height: 40,
-    width: 200,
-    marginTop: 5,
-    marginBottom: 10,
-    borderColor: 'grey',
-    borderWidth: 1,
-    backgroundColor: 'lightgrey',
+  formContainer: {
+    backgroundColor: 'white',
+    width: 300,
+    height: 300,
+    alignSelf: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 5,
+    opacity: 0.8
+  },
+  bg: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+    resizeMode: "cover",
+    position: 'absolute',
+    justifyContent: "center"
   },
 });
 

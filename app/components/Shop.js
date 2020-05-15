@@ -1,9 +1,12 @@
 import React, {Component} from 'react';
 import axios from 'axios';
 //import { getData } from '../FakerData';
-import { StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, Image, ImageBackground } from 'react-native';
 import { withRouter } from "react-router";
 import t from 'tcomb-form-native';
+const bg = require('../img/bg.gif');
+const no = require('../img/no.png');
+const yes = require('../img/yes.png');
 
 const Form = t.form.Form;
 
@@ -101,52 +104,74 @@ class Shop extends Component {
   render(){
     return (
       <View style={styles.shopContainer}>
-        <Form 
-          ref={c => this._form = c}
-          type={Item}
-          value={this.state.purchase}
-          onChange={this.handleChange}
-          options={options}
-        />         
-        <Image 
-          style={styles.image}
-          source={{ uri: this.state.imageUri }}
-          accessibilityLabel='api data'
-        />
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity onPress={() => this.handleSubmit('No')}>
-            <Text style={styles.button}>NO</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => this.handleSubmit('Yes')}>
-            <Text style={styles.button}>YES</Text>
-          </TouchableOpacity>
-        </View>
+        <ImageBackground source={bg} style={styles.bg}>
+          <Form 
+            ref={c => this._form = c}
+            type={Item}
+            value={this.state.purchase}
+            onChange={this.handleChange}
+            options={options}
+          />         
+          <Image 
+            style={styles.image}
+            source={{ uri: this.state.imageUri }}
+            accessibilityLabel='api data'
+          />
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity onPress={() => this.handleSubmit('No')}>
+              <Image 
+                source={no}
+                style={styles.nobutton}
+              />
+            </TouchableOpacity>            
+            <TouchableOpacity onPress={() => this.handleSubmit('Yes')}>
+              <Image 
+                source={yes}
+                style={styles.yesbutton}
+              />        
+            </TouchableOpacity>
+          </View>
+        </ImageBackground>  
       </View>
     );    
   }
 }
 
 const styles = StyleSheet.create({
-  image: {
-    height: 200,
-    width: 200,
-  },
   shopContainer: {
     flex: 1,
     backgroundColor: 'white',
     alignItems: 'center',
     justifyContent: 'center',
   },
+  image: {
+    height: 300,
+    width: 300,
+    borderRadius: 5
+  },
   buttonContainer: {
     display: 'flex',
     flexDirection: 'row',
+    alignItems: 'center',
   },
-  button: {
-    backgroundColor: 'black',
-    color: 'white',
-    marginTop: '10%',
-    marginRight: '10%',
-    textAlign: 'center',
+  nobutton: {
+    marginRight: '5%',
+    height: 100,
+    width: 100,
+  },
+  yesbutton: {
+    marginLeft: '5%',
+    height: 80,
+    width: 80,    
+  },
+  bg: {
+    flex: 1,
+    resizeMode: "cover",
+    width: '100%',
+    height: '100%',
+    position: 'absolute',
+    alignItems: 'center',
+    justifyContent: "center"
   },
 });
 
