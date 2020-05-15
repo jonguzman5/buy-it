@@ -53,7 +53,7 @@ class CategoryPick extends Component {
             case 'Fashion':
                 updatedUser = {
                     budget: budgetProps,
-                    likes: 'Fashion',
+                    likes: 'Clothes',//changed from 'Fashion' due to api 
                     id: idProps
                 }       
                 break;
@@ -79,7 +79,7 @@ class CategoryPick extends Component {
             data: updatedUser
         }).then(response => {
             if(response.status === 200){
-                //console.log(`IN CATEGORY: ${JSON.stringify(response)}`);
+                console.log(`IN CATEGORY1: ${JSON.stringify(response)}`);
                 history.push({
                     pathname: '/shop',
                     state: {
@@ -92,7 +92,24 @@ class CategoryPick extends Component {
             }
             else {
                 throw new Error();
-            }        
+            }
+            return (
+              axios({
+                method: 'post',
+                url: `http://localhost:3003/items/`,
+                data: updatedUser.likes
+              })              
+            )        
+        }).then(response => {
+          console.log(`IN CATEGORY2: ${JSON.stringify(response)}`);
+          /*
+          if(response.status === 200){
+            console.log(`IN CATEGORY2: ${JSON.stringify(response)}`);
+          }
+          else {
+            throw new Error();
+          }
+          */
         }).catch(error => {
             alert(`An error has occurred`);
             console.log(error);

@@ -15,6 +15,14 @@ const getUsers = (request, response) => {
         response.status(200).json(results.rows)
     })
 }
+const getItems = (request, response) => {
+    pool.query('SELECT * FROM items ORDER BY id ASC', (error, results) => {
+        if(error) {
+            throw error
+        }
+        response.status(200).json(results.rows)
+    })
+}
 /************** SETTERS *************/
 const setUsers = (request, response) => {
     const { budget } = request.body
@@ -40,8 +48,21 @@ const updateUsers = (request, response) => {
         }
     )
 }
+
+const setItems = (request, response) => {
+    const { category } = request.body
+    pool.query(`INSERT INTO items (category) VALUES ($1) RETURNING *`, [category], (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(201).send(`Category added to item with ID: ${results.rows[0].id}`)
+    })
+}
+
 module.exports = {
     getUsers,
     setUsers,
     updateUsers,
+    getItems,
+    setItems,
 }

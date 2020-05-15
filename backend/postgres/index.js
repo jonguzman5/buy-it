@@ -18,9 +18,12 @@ app.get('/', (request, response) => {
 })
 
 app.get('/users', db.getUsers);
-
 app.post('/users', db.setUsers);
 app.put('/users/:id', db.updateUsers);
+
+app.get('/items', db.getItems);
+app.post('/items', db.setItems);
+
 
 app.listen(port, () => {
     console.log(`App running on port ${port}.`)
